@@ -24,7 +24,7 @@ def find_day(day,l):
                 return i
     print "Error: Could not find day %s in %s" % (day,l)
 
-for filename in glob.glob('*.csv'):
+def process_file(filename):
     with open(filename, 'rb') as csvfile:                                                                                                
         reader = csv.reader(csvfile, delimiter=',')
         for i, row in enumerate(reader):
@@ -46,18 +46,22 @@ for filename in glob.glob('*.csv'):
             i = find_day(day,header)
             value = int(data[i])
             if type == SQUARE:
-                value = value*value
+                answer = value*value
             elif type == DOUBLE:
-                value = value*2
+                answer = value*2
             # find the description column in the header
             i = header.index(DESCRIPTION)
-            description = data[i] + ' ' + str(value)
+            description = data[i] + ' ' + str(answer)
             result = {
                 'day': day,
                 'description': description,
-                type: value,
+                type: answer,
                 'value': value,
             }
             results.append(result)
-        print filename
-        print results
+    return results
+
+for filename in glob.glob('*.csv'):
+    results = process_file(filename)
+    print filename
+    print results
